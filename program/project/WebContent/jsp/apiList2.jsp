@@ -81,7 +81,7 @@
 				    success: function(data) {
 				        //请求成功处理，和本地回调完全一样
 				        alert(123);
-				        var apiListData = data;
+				        var apiListData = encodeURI(data);
 		                // apiListData = encodeURI(JSON.parse(ajax.responseText));
 		                
 		                document.form1.elements[0] = apiListData;

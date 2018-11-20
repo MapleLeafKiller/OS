@@ -8,7 +8,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<table width="600" border="1" cellspacing="0">
+	<!-- <table width="600" border="1" cellspacing="0">
 	<thead> 
 	<tr> 
 		<th>编号</th> 
@@ -16,7 +16,7 @@
 	</tr>  
 	</thead> 
 	<tbody id="tbMain"></tbody> 
-	</table>
+	</table> -->
 	<script>
 		$(document).ready(function() {
 		 	getApiList();
@@ -33,10 +33,16 @@
                     } */
                     var tbody = document.getElementById('tbMain'); 
         		    for(var i = 0;i < apiListData.length; i++){ //遍历一下json数据 
-        		    	var trow1 = getDataRow1(apiListData[i]); //定义一个方法,返回tr数据 
-					 	tbody.appendChild(trow1); 
-        			    var trow2 = getDataRow2(apiListData[i]); //定义一个方法,返回tr数据
-        			    tbody.appendChild(trow2); 
+        		    	var trow1 = getDataRow1(apiListData[i]); //定义一个方法,返回tr数据
+					 	var trow2 = getDataRow2(apiListData[i]); //定义一个方法,返回tr数据
+        			    var table = document.createElement("table");
+        			    table.appendChild(trow1); 
+        			    table.appendChild(trow2);  
+        			    
+        		    	var x = document.createElement("a");
+        		    	x.href="http://www.baidu.com";
+        			    x.appendChild(table);
+        			    document.body.appendChild(x);
         		    }
 		        } 
 			}); 
