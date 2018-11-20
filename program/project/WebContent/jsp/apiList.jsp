@@ -15,6 +15,7 @@
 	<head>
 		<meta content="text/html; charset=UTF-8">
 		<title>API列表页面</title>
+		
 	</head>
 	
 	<body>
@@ -30,7 +31,10 @@
 			Gson gson = new Gson();
 			List apiList = gson.fromJson(list,List.class); //将数据从JsonArray类型转换为list类型
 			request.setAttribute("apiList",apiList);
+			// 设置参数编码
+			request.setCharacterEncoding("utf-8");
 		%>
+		
 	
 		<!-- api列表，每一个api以表格形式展现，点击可跳转至详情页面 -->
 		<c:forEach items="${apiList}" var="api">
@@ -57,10 +61,11 @@
 		<script type="text/javascript">
 			// 跳转到指定api的详情页面
 			function jump(api_name){
-				// 跳转到api详情页面，api_name作为参数传递过去
-				var tempjson = <%=tempJson%>;
+				// 跳转到api详情页面，api_name以及api列表数据作为参数传递过去
+				var tempjson = '<%=tempJson%>';
+				var param = encodeURI('<%=tempJson%>');
 				// window.self.location.href="api.jsp?api_name="+api_name+"&tempJson="+tempjson;
-				window.self.location.href="http://www.baidu.com";
+				window.self.location.href="home.jsp?api_name="+api_name+"&tempJson="+param;
 			}
 		</script>
 

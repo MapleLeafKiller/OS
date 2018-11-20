@@ -12,7 +12,7 @@
 <%
 	String api_name = request.getParameter("tempJson");
 	String newparam = new String(api_name.getBytes("iso-8859-1"),"utf-8");
-	System.out.println(newparam);
+	System.out.println("newparam="+newparam);
 %>
     <h1>获取 json 数据</h1>
     <input type="button"  value="获取json" id='btnJson'>
@@ -88,3 +88,38 @@ $(document).ready(function(){
   });
 });
 </script>
+
+
+
+
+
+
+
+
+
+
+
+<!-- 从接口获取api列表数据 -->
+		<script type="text/javascript">
+		    function getData() {
+		    	
+		        var ajax = new XMLHttpRequest();
+		        // ajax.open('get','http://125.216.243.166:8888/api_search?api_name=c');
+		        ajax.open('get','http://125.216.243.166:8888/all_api');
+		        ajax.send();
+		        ajax.contentType = "application/x-www-form-urlencoded; charset=utf-8";
+		
+		        ajax.onreadystatechange = function () {
+		        	// 通过隐藏表单提交数据，使得数据可以在java代码中获取
+		            if (ajax.readyState==4&&ajax.status==200) {
+		                var apiListData = JSON.parse(ajax.responseText);
+		                // apiListData = encodeURI(JSON.parse(ajax.responseText));
+		                
+		                document.form1.elements[0] = apiListData;
+		                document.getElementById('form1').submit();
+		            }
+		        }
+		    }
+		    
+		    window.onload = getData; //加载该页面时执行函数
+		</script>
