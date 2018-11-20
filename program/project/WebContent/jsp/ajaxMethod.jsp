@@ -1,26 +1,20 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <!DOCTYPE html>
+<html lang="en">
 <head>
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
 
-    <meta content="text/html; charset=UTF-8">
+    <meta charset="UTF-8">
     <title>Document</title>
 </head>
 <body>
-
-<%
-	String api_name = request.getParameter("tempJson");
-	String newparam = new String(api_name.getBytes("iso-8859-1"),"utf-8");
-	System.out.println(newparam);
-%>
     <h1>获取 json 数据</h1>
     <input type="button"  value="获取json" id='btnJson'>
     <button>向页面发送 HTTP GET 请求，然后获得返回的结果</button>
-    <h1><%=newparam %></h1>
-    
 </body>
 </html>
+
 
 
 

@@ -34,8 +34,9 @@
 	
 		<!-- api列表，每一个api以表格形式展现，点击可跳转至详情页面 -->
 		<c:forEach items="${apiList}" var="api">
+			<%-- <a href="javascript:jump('${api.api_name}')" style="text-decoration:none;"> --%>
 			<a href="javascript:jump('${api.api_name}')" style="text-decoration:none;">
-				<table>
+		    	<table>
 		    		<tr>
 		    			<td  rowspan="2">
 		        			<p><font size="25">${api.api_name}&nbsp;&nbsp;</font></p>
@@ -57,9 +58,9 @@
 		<script type="text/javascript">
 			// 跳转到指定api的详情页面
 			function jump(api_name){
-				// 跳转到api详情页面，api_name作为参数传递过去
-				var tempjson = <%=tempJson%>;
-				// window.self.location.href="api.jsp?api_name="+api_name+"&tempJson="+tempjson;
+				// 跳转到api详情页面，api信息作为参数传递过去
+				// window.self.location.href="api.jsp?api_name=" + api_name;
+				var url = "api.jsp?api_name=" + api_name;
 				window.self.location.href="http://www.baidu.com";
 			}
 		</script>

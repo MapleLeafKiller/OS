@@ -8,13 +8,16 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%> 
 <!DOCTYPE html>
 
-<!-- API列表页面，点击某项API跳转到其对应的详情页面 -->
+<!-- Case列表页面，点击某项Case跳转到其对应的详情页面 -->
 
 <html>
 		
 	<head>
 		<meta content="text/html; charset=UTF-8">
 		<title>API列表页面</title>
+		<%
+			request.setCharacterEncoding("UTF-8");
+		%>
 	</head>
 	
 	<body>
@@ -31,11 +34,12 @@
 			List apiList = gson.fromJson(list,List.class); //将数据从JsonArray类型转换为list类型
 			request.setAttribute("apiList",apiList);
 		%>
+		
 	
 		<!-- api列表，每一个api以表格形式展现，点击可跳转至详情页面 -->
 		<c:forEach items="${apiList}" var="api">
 			<a href="javascript:jump('${api.api_name}')" style="text-decoration:none;">
-		    	<table>
+				<table>
 		    		<tr>
 		    			<td  rowspan="2">
 		        			<p><font size="25">${api.api_name}&nbsp;&nbsp;</font></p>
@@ -53,44 +57,15 @@
 			</a>
 		</c:forEach>
 
-		<script type="text/javascript">
-		    function () {
-		        // 发送ajax 请求 需要 五步
-		
-		        // （1）创建异步对象
-		        var ajaxObj = new XMLHttpRequest();
-		
-		        // （2）设置请求的参数。包括：请求的方法、请求的url。
-		        ajaxObj.open('get', 'http://125.216.243.166:8888/all_api');
-		
-		        // （3）发送请求
-		        ajaxObj.send();
-		
-		        //（4）注册事件。 onreadystatechange事件，状态改变时就会调用。
-		        //如果要在数据完整请求回来的时候才调用，我们需要手动写一些判断的逻辑。
-		        ajaxObj.onreadystatechange = function () {
-		            // 为了保证 数据 完整返回，我们一般会判断 两个值
-		            if (ajaxObj.readyState == 4 && ajaxObj.status == 200) {
-		                // 如果能够进到这个判断 说明 数据 完美的回来了,并且请求的页面是存在的
-		                // 5.在注册的事件中 获取 返回的 内容 并修改页面的显示
-		                console.log('数据返回成功');
-		
-		                // 数据是保存在 异步对象的 属性中
-		                console.log(ajaxObj.responseText);
-		
-		                // 修改页面的显示
-		                document.querySelector('h1').innerHTML = ajaxObj.responseText;
-		            }
-		        }
-		    }
-		</script>
 
 		<script type="text/javascript">
 			// 跳转到指定api的详情页面
 			function jump(api_name){
-				// 跳转到api详情页面，api_name作为参数传递过去
-				// window.self.location.href="api.jsp?api_name=" + api_name;
-				window.self.location.href="http://www.baidu.com";
+				// 跳转到api详情页面，api_name以及api列表数据作为参数传递过去
+				var tempjson = '<%=tempJson%>';
+				var param = encodeURI('<%=tempJson%>');
+				// window.self.location.href="api.jsp?api_name="+api_name+"&tempJson="+tempjson;
+				window.self.location.href="home.jsp?api_name="+api_name+"&tempJson="+param;
 			}
 		</script>
 
