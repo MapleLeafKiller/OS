@@ -10,6 +10,7 @@
 </head>
 
 <body>
+	<select id="api_list"></select>
 	<script>
 		$(document).ready(function() {
 		 	getApiList(); //页面加载时调用函数，获取api列表信息
@@ -49,6 +50,10 @@
 		function getTable(api){
 			var table = document.createElement("table");
 			var row1 = document.createElement('tr');
+			// 第一列数据放api的描述
+		    var nameCell = document.createElement('td');
+		    nameCell.innerHTML = JSON.stringify(api.api_name); //注意:要使用JSON.stringify()取数据
+		    row1.appendChild(nameCell);
 			// 第一列数据放api的描述
 		    var descCell = document.createElement('td');
 		    descCell.innerHTML = JSON.stringify(api.api_desc); //注意:要使用JSON.stringify()取数据

@@ -6,29 +6,35 @@
 <head>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-	<title>Insert title here</title>
+	<title>API列表页面</title>
 </head>
 
 <body>
+	<%
+		// 这里应该接收搜索页面传递过来的搜索参数
+		// String api_name = request.getParameter("api_name");
+	%>
 	<script>
 		$(document).ready(function() {
 		 	getApiList(); //页面加载时调用函数，获取api列表信息
 		});
 		/* 
-			获取api列表信息
+			ajax获取api列表信息
 		*/
 		function getApiList(){
 			$.ajax({
+		    	// url : "http://125.216.243.166:8888/api_search?api_name="+ get api_name
 		    	url : "http://125.216.243.166:8888/all_api",
-		        type : 'get', 
+		        type : 'get', //post
 		        dataType : 'json', 
+		        data:{}, //请求参数
 		        success : function (res) { 
                     var apiListData = res.data;
                     /*
-                    	遍历api列表数据,对每一个api,生成一个table展示它的信息,用并一个超链接将这个table包裹起来
+                    	遍历api列表数据,对每一个api,动态生成一个table展示它的信息,用并一个超链接将这个table包裹起来
                     	如此,点击一个api时就能跳转到超链接指定的该api的详情页面
                     */
-        		    for(var i = 0;i < apiListData.length; i++){ //遍历一下json数据 
+        		    for(var i = 0;i < apiListData.length; i++){   
         			    var table = getTable(apiListData[i]);
         			    // 设置超链接并包裹table
         		    	var link = document.createElement("a");
@@ -49,13 +55,17 @@
 		function getTable(api){
 			var table = document.createElement("table");
 			var row1 = document.createElement('tr');
-			// 第一列数据放api的描述
+			// 第1列数据放api的名字
+		    var nameCell = document.createElement('td');
+		    nameCell.innerHTML = api.api_name;
+		    row1.appendChild(nameCell);
+			// 第2列数据放api的描述
 		    var descCell = document.createElement('td');
-		    descCell.innerHTML = JSON.stringify(api.api_desc); //注意:要使用JSON.stringify()取数据
+		    descCell.innerHTML = api.api_desc;
 		    row1.appendChild(descCell);
-		 	// 第二列数据放api的函数原型
+		 	// 第3列数据放api的函数原型
 		    var funcCell = document.createElement('td');
-		    funcCell.innerHTML = JSON.stringify(api.api_func); 
+		    funcCell.innerHTML = api.api_func; 
 		    row1.appendChild(funcCell); 
 		    
 			table.appendChild(row1); 

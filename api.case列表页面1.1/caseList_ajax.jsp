@@ -1,0 +1,70 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+
+<head>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<title>case列表页面</title>
+</head>
+
+<body>
+	<%
+		// 这里应该接收搜索页面传递过来的搜索参数
+		// String case_name = request.getParameter("case_name");
+	%>
+	<script>
+		$(document).ready(function() {
+		 	getcaseList(); //页面加载时调用函数，获取case列表信息
+		});
+		/* 
+			ajax获取case列表信息
+		*/
+		function getcaseList(){
+			$.ajax({
+		    	// url : "http://125.216.243.166:8888/case_search?case_name="+ get case_name
+		    	url : "http://125.216.243.166:8888/all_case",
+		        type : 'get', //post
+		        dataType : 'json', 
+		        data:{}, //请求参数
+		        success : function (res) { 
+                    var caseListData = res.data;
+                    /*
+                    	遍历case列表数据,对每一个case,动态生成一个table展示它的信息,用并一个超链接将这个table包裹起来
+                    	如此,点击一个case时就能跳转到超链接指定的该case的详情页面
+                    */
+        		    for(var i = 0;i < caseListData.length; i++){   
+        			    var table = getTable(caseListData[i]);
+        			    // 设置超链接并包裹table
+        		    	var link = document.createElement("a");
+        		    	var case_name = caseListData[i].case_name;
+        		    	// 设置跳转的页面:case详细页面(参数为case名)
+        		    	// link.href="caseDetail.jsp?case_name="+case_name; 
+        		    	link.href="http://www.baidu.com";
+        		    	link.appendChild(table); //用超链接包裹table,点击table就可以跳转
+        		    	link.style="text-decoration:none;" //设置超链接不显示下划线
+        			    document.body.appendChild(link); //放到页面上
+        		    }
+		        } 
+			}); 
+		}
+		/*
+			定义一个表格,在表格中展示case的信息
+		*/
+		function getTable(caseI){
+			var table = document.createElement("table");
+			var row1 = document.createElement('tr');
+			// 第1列数据放case的名字
+		    var nameCell = document.createElement('td');
+		    nameCell.innerHTML = caseI.case_name;
+		    row1.appendChild(nameCell);
+		    
+			table.appendChild(row1); 
+		    return table;
+		}
+	</script>　
+	
+</body>
+
+</html>

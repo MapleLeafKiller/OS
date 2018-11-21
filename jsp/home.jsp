@@ -10,7 +10,7 @@
 <body>
 
 <%
-	String api_name = request.getParameter("tempJson");
+	String api_name = request.getParameter("apiListData");
 	String newparam = new String(api_name.getBytes("iso-8859-1"),"utf-8");
 	System.out.println("newparam="+newparam);
 %>
