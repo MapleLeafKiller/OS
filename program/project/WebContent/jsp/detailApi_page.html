@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.0/jquery.min.js"></script>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+
+</head>
+
+
+
+<body>
+
+<script>
+    $(document).ready(function(){
+        var api_name = 'open';
+        getApiDetail(api_name);
+    });
+
+    //用ajax获取信息
+    function getApiDetail(api_name){
+        $.ajax({
+            url: "http://125.216.243.166:8888/api_detail",
+            type:"post",
+            dataType:"json",
+            data:{"api_name":api_name},
+            success:(function(res){
+                var content = res.data;
+
+                $("#ul1").html("API名字: " + content.api_name);
+                $("#ul2").html("API描述: " + content.api_desc);
+                $("#ul3").html("API函数: " + content.api_func);
+                $("#ul4").html("API介绍: " + content.api_para);
+            })
+        })
+
+    }
+
+
+</script>
+
+<ul id = "ul1"></ul>
+<ul id = "ul2"></ul>
+<ul id = "ul3"></ul>
+<ul id = "ul4"></ul>
+<input type = "button" id = "back" value = "back">
+</body>
+</html>
