@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<!--components Badges in Collapsibles
+	javascript collapsibles-->
+	<meta charset="utf-8">
+	<meta name="viewport"    content="width=device-width, initial-scale=1.0">
+	<link type="text/css" rel="stylesheet" href="assets/css/materialize.min.css"  media="screen,projection"/>
+	<link rel="stylesheet" media="screen" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+	<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+	<link rel="stylesheet" href="assets/css/font-awesome.min.css">
+	<!-- Custom styles for our template -->
+	<link rel="stylesheet" href="assets/css/bootstrap-theme.css" media="screen" >
+	<link rel="stylesheet" href="assets/css/main.css">
+	<title>Home</title>
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+	<script src="assets/js/html5shiv.js"></script>
+	<script src="assets/js/respond.min.js"></script>
+	<script type="text/javascript" src="assets/js/materialize.min.js"></script>
+	<![endif]-->
+</head>
+
+<body class="home">
+	<!-- Fixed navbar -->
+	<div class="navbar navbar-inverse navbar-fixed-top headroom" >
+		<div class="container">
+			<div class="navbar-header">
+				<!-- Button for smallest screens -->
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+					<span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> 
+				</button>
+<!-- 				<a class="navbar-brand" href="index.html"><img src="assets/images/logo.png" alt="Progressus HTML5 template"></a> -->
+				<h1 class="navbar-brand">Linux C API 电子教官</h1>
+			</div>
+			<div class="navbar-collapse collapse">
+				<ul class="nav navbar-nav pull-right">
+					<li class="active"><a href="#">Home</a></li>
+					<li><a href="#apilist">Api List</a></li>
+					<li><a href="#caselist">Case List</a></li>
+				</ul>
+			</div>
+			<!--/.nav-collapse -->
+		</div>
+	</div> 
+	<!-- /.navbar -->
+
+	<!-- Header -->
+	<header id="head">
+		<div class="container">
+			<div class="row">
+				<h1 class="lead">API、案例智能搜索</h1>
+				<p class="tagline">目前只支持第三章文件类型API及相关案例</p>
+				<input type="search" class="search" name="search" placeholder="Enter what you want to search here... ">
+
+				<p>
+					<a class="btn btn-action btn-lg" role="button">SEARCH</a>
+				</p>
+			</div>
+		</div>
+	</header>
+	<!-- /Header -->
+
+	<!-- Intro -->
+	<div class="container text-center">
+		<br> <br>
+		<h2 class="thin">智能搜索功能的介绍</h2>
+		<p class="text-muted">
+			The difference between involvement and commitment is like an eggs-and-ham breakfast:<br> 
+			the chicken was involved; the pig was committed.
+		</p>
+	</div>
+	<!-- /Intro-->
+		
+	<!-- Highlights - jumbotron -->
+	<div class="jumbotron top-space">
+		<div class="container">
+			
+			<h2 id="apilist" class="text-center thin">API展示</h2>
+			
+			<div class="row">
+				<!--插入API-->
+			</div> <!-- /row  -->
+		
+		</div>
+	</div>
+	<!-- /Highlights -->
+
+	</div>
+	<!-- container -->
+	<div class="container">
+
+		<h2 class="text-center top-space">Case展示</h2>
+		<br>
+
+		<div class="row" id="caselist">
+
+		</div> <!-- /row -->
+
+	</div>
+	<footer id="footer" class="top-space">
+		<div class="footer1">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-6 widget">
+						<h3 class="widget-title">Group Members</h3>
+						<div class="widget-body">
+							<p>
+								吕朝阳 20182103xxxx
+								曾行 20182103xxxx
+								余智星 201821033373
+								谭力滔 201821033167<br>
+								陈奕健 201821033274
+								郭宇 20182103xxxx
+								谢家亮 201821033159
+								朱戈仁 201821033172<br>
+								from SCUT
+							</p>
+						</div>
+					</div>
+
+
+				</div>
+			</div>
+		</div>
+			</div>
+		</div>
+	</footer>	
+
+	<!-- JavaScript libs are placed at the end of the document so the pages load faster -->
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            getApiList(); //页面加载时调用函数，获取api列表信息
+			getCaseList();//页面加载时调用函数，获取case列表信息，只放了case的名字，没有代码
+        });
+        function getApiList(){
+            $.ajax({
+                // url : "http://125.216.243.166:8888/api_search?api_name="+ api_name
+                url : "http://125.216.243.166:8888/all_api",
+                type : 'get', //post
+                dataType : 'json',
+                data:{}, //请求参数
+                success : function (res) {
+                    var apiListData = res.data;
+                    /*
+                        遍历api列表数据,对每一个api,动态生成一个card展示它的信息,用并一个超链接将这个card包裹起来
+                        如此,点击一个api的名字时就能跳转到超链接指定的该api的详情页面
+                    */
+                    for(var i = 0;i < apiListData.length; i++){
+                        appendApiCard(apiListData[i]);
+                    }
+                }
+            });
+        }
+        function appendApiCard(api){
+            //将API信息做成卡片
+            var api_list = $('div.jumbotron div.container div.row');
+            var card = document.createElement("div");
+            card.setAttribute("class","col-md-3 col-sm-6 highlight");
+            var card_name = document.createElement("a");
+            card_name.setAttribute("class", "h-caption");
+            card_name.setAttribute("href",encodeURI("api_detail.html?api_name="+api.api_name));
+            card_name.innerHTML = '<h4>'+api.api_name+'</h4>';
+            card.appendChild(card_name);
+            var card_content = document.createElement("div");
+            card_content.setAttribute("class","h-body text-center");
+            card_content.innerHTML = '<p>'+api.api_desc+'</p>';
+            card.appendChild(card_content);
+            api_list.append(card);
+        }
+
+        function getCaseList(){
+            $.ajax({
+                // url : "http://125.216.243.166:8888/api_search?api_name="+ api_name
+                url : "http://125.216.243.166:8888/all_case",
+                type : 'get', //post
+                dataType : 'json',
+                data:{}, //请求参数
+                success : function (res) {
+                    var caseListData = res.data;
+                    /*
+                        遍历case列表数据,对每一个case,动态生成一个card展示它的信息,用并一个超链接将这个card包裹起来
+                        如此,点击一个case时就能跳转到超链接指定的该case的详情页面
+                        这里的case详情页还没有做
+                    */
+                    for(var i = 0;i < caseListData.length; i++){
+                        appendCaseCard(caseListData[i]);
+                        // console.log(i)
+                    }
+                }
+            });
+        }
+        function appendCaseCard(Case){
+            //将case信息做成列表
+            var case_list = $('#caselist');
+            var card = document.createElement("div");
+            card.setAttribute("class","col-md-3 col-sm-6 highlight");
+            var card_name = document.createElement("a");
+            card_name.setAttribute("class", "h-caption");
+            // encodeURI("case_detail.html?case_name="+Case.case_name)
+            card_name.setAttribute("href","");
+            card_name.innerHTML = '<h3>'+Case.case_id+'. '+Case.case_name+'</h3>';
+            card.appendChild(card_name);
+            case_list.append(card);
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<!--components Badges in Collapsibles
+	javascript collapsibles-->
+	<meta charset="utf-8">
+	<meta name="viewport"    content="width=device-width, initial-scale=1.0">
+	<link type="text/css" rel="stylesheet" href="assets/css/materialize.min.css"  media="screen,projection"/>
+	<link rel="stylesheet" media="screen" href="http://fonts.googleapis.com/css?family=Open+Sans:300,400,700">
+	<link rel="stylesheet" href="assets/css/bootstrap.min.css">
+	<link rel="stylesheet" href="assets/css/font-awesome.min.css">
+	<!-- Custom styles for our template -->
+	<link rel="stylesheet" href="assets/css/bootstrap-theme.css" media="screen" >
+	<link rel="stylesheet" href="assets/css/main.css">
+	<title>Api Detail</title>
+	<!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+	<!--[if lt IE 9]>
+	<script src="assets/js/html5shiv.js"></script>
+	<script src="assets/js/respond.min.js"></script>
+	<script type="text/javascript" src="assets/js/materialize.min.js"></script>
+	<![endif]-->
+</head>
+
+<body>
+	<!-- Fixed navbar -->
+
+	<div class="navbar navbar-inverse navbar-fixed-top headroom" >
+		<div class="container">
+			<div class="navbar-header">
+				<!-- Button for smallest screens -->
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse"><span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span> </button>
+				<a class="navbar-brand" href="index.html">Linux C API 电子教官</a>
+			</div>
+			<div class="navbar-collapse collapse">
+				<ul class="nav navbar-nav pull-right">
+					<li class="active"><a href="index.html">Home</a></li>
+					<li><a href="api_detail.html">Api List</a></li>
+					<li><a href="#caselist">Case List</a></li>
+				</ul>
+			</div><!--/.nav-collapse -->
+		</div>
+	</div> 
+	<!-- /.navbar -->
+	<br>
+	<br>
+	<!-- container -->
+	<div class="container">
+		<div class="row">
+			<br>
+			<!-- Sidebar -->
+			<aside class="col-md-4 sidebar sidebar-left">
+				<h2><span class="label label-default" >API 列表</span></h2>
+				<br>
+				<div class="collection">
+				</div>
+			</aside>
+			<!-- /Sidebar -->
+
+			<!-- Article main content -->
+			<article class="col-md-8 maincontent">
+				<header class="page-header">
+					<h1 class="page-title" id="api_name">Api Name</h1>
+				</header>
+				<h2><span class="label label-primary" >API</span></h2>
+				<div class="panel-body" id="api_code">
+					<p><font size="4" face="Verdana">The code of API</font></p>
+				</div>
+				<h2><span class="label label-primary" >描述</span></h2>
+				<div class="panel-body" id="api_desc">
+					<p><font size="4" face="Verdana">The desc of API</font></p>
+				</div>
+				<h2><span class="label label-primary" >参数</span></h2>
+				<div class="panel-body" id="api_para">
+					<!--<p><font size="4" face="Verdana">The para of API</font></p>-->
+				</div>
+				<h2><span class="label label-primary" >返回值</span></h2>
+				<div class="panel-body" id="api_return">
+					<p><font size="4" face="Verdana">The return of API</font></p>
+				</div>
+				<h2><span class="label label-primary" >案例</span></h2>
+				<button type="button" class="btn btn-primary" data-toggle="collapse"
+						data-target="#case">
+					查看详情
+				</button>
+				<div id="case" class="collapse">
+					具体case内容
+				</div>
+			</article>
+			<!-- /Article -->
+
+		</div>
+	</div>	<!-- /container -->
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+	<script>
+        $(document).ready(function() {
+            //通过本地url获取参数
+            var localurl = decodeURI(window.location.href);
+            var argsIndex = localurl.split("?api_name=");
+            var api_name = argsIndex[1];
+            getApiDetail(api_name);
+            getApiList(); //页面加载时调用函数，获取api列表信息
+        });
+        function getApiList(){
+            $.ajax({
+                // url : "http://125.216.243.166:8888/api_search?api_name="+ api_name
+                url : "http://125.216.243.166:8888/all_api",
+                type : 'get', //post
+                dataType : 'json',
+                data:{}, //请求参数
+                success : function (res) {
+                    var apiListData = res.data;
+                    /*
+                        遍历api列表数据,对每一个api,动态生成一个table展示它的信息,用并一个超链接将这个table包裹起来
+                        如此,点击一个api时就能跳转到超链接指定的该api的详情页面
+                    */
+                    for(var i = 0;i < apiListData.length; i++){
+                        appendLabel(apiListData[i]);
+                    }
+                }
+            });
+        }
+        function appendLabel(api){
+            var api_list = $('aside.sidebar-left div.collection');
+            var api_label = document.createElement('a');
+            api_label.setAttribute("href",encodeURI("api_detail.html?api_name="+api.api_name));
+            api_label.setAttribute("class","collection-item");
+            var api_text = document.createElement("span");
+            api_text.setAttribute("class","blue-text text-darken-2");
+            api_text.innerHTML = api.api_name;
+            api_label.appendChild(api_text);
+            api_list.append(api_label);
+        }
+        function getApiDetail(api_name) {
+            $.ajax({
+                url: "http://125.216.243.166:8888/api_detail",
+                type:"post",
+                dataType:"json",
+                data:{"api_name":api_name},
+                success:(function(res){
+                    var content = res.data;
+                    $("#api_name").html(content.api_name);
+                    $("#api_code").html('<p><font size="4" face="Verdana">'+content.api_func+'</font></p>');
+                    $("#api_desc").html('<p><font size="4" face="Verdana">'+content.api_desc+'</font></p>');
+                    split_para(content.api_para);
+                    $("#api_return").html('<p><font size="4" face="Verdana">'+content.api_return+'</font></p>');
+                })
+            })
+        }
+        function split_para(paras){
+            var para_arr = paras.split("\n");
+            console.log(para_arr);
+            for(var para in para_arr){
+                $("#api_para").append('<p><font size="4" face="Verdana">'+para_arr[para].trim()+'</font></p>');
+			}
+        }
+	</script>
+	<!-- JavaScript libs are placed at the end of the document so the pages load faster -->
+</body>
+</html>
